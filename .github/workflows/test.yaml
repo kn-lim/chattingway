@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'terraform/**'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'terraform/**'
+
+name: Run Tests
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '1.23.2'
+        cache: false
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Run tests for gamble
+      run: go test -coverprofile=coverage-gamble.out ./gamble/...
+
+    - name: Coveralls for gamble
+      uses: coverallsapp/github-action@v2
+      with:
+        file: ./coverage-gamble.out
