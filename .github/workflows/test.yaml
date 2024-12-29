@@ -30,10 +30,10 @@ jobs:
     - name: Install dependencies
       run: go mod download
 
-    - name: Run tests for gamble
-      run: go test -coverprofile=coverage-gamble.out ./gamble/...
+    - name: Run tests
+      run: go test -coverprofile=coverage-gamble.out ./...
 
-    - name: Coveralls for gamble
+    - name: Coveralls
       uses: coverallsapp/github-action@v2
       with:
-        file: ./coverage-gamble.out
+        file: ./coverage.out
