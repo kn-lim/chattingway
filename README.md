@@ -7,7 +7,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/kn-lim/chattingway)](https://goreportcard.com/report/github.com/kn-lim/chattingway)
 ![License](https://img.shields.io/github/license/kn-lim/chattingway)
 
-Package for my chat bots to reuse code:
+Module for my chat bots to reuse code:
 
 - [dreamingway-bot](https://github.com/kn-lim/dreamingway-bot) (Discord)
 - [slackingway-bot](https://github.com/kn-lim/slackingway-bot) (Slack)

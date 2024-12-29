@@ -31,7 +31,7 @@ jobs:
       run: go mod download
 
     - name: Run tests
-      run: go test -coverprofile=coverage-gamble.out ./...
+      run: go test -coverprofile=coverage.out ./...
 
     - name: Coveralls
       uses: coverallsapp/github-action@v2
