@@ -3,9 +3,8 @@ package gamble_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/kn-lim/chattingway/gamble"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCoinflip(t *testing.T) {
