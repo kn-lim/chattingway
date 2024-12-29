@@ -1,6 +1,7 @@
 # chattingway
 
 ![Go](https://img.shields.io/github/go-mod/go-version/kn-lim/chattingway)
+[![Go Reference](https://pkg.go.dev/badge/github.com/kn-lim/chattingway.svg)](https://pkg.go.dev/github.com/kn-lim/chattingway)
 ![GitHub Workflow Status - Release](https://img.shields.io/github/actions/workflow/status/kn-lim/chattingway/release.yaml)
 ![GitHub Workflow Status - Test](https://img.shields.io/github/actions/workflow/status/kn-lim/chattingway/test.yaml?label=tests)
 [![Coverage Status](https://coveralls.io/repos/github/kn-lim/chattingway/badge.svg?branch=main)](https://coveralls.io/github/kn-lim/chattingway?branch=main)
@@ -11,10 +12,3 @@ Module for my chat bots to reuse code:
 
 - [dreamingway-bot](https://github.com/kn-lim/dreamingway-bot) (Discord)
 - [slackingway-bot](https://github.com/kn-lim/slackingway-bot) (Slack)
-
-## Modules
-
-### gamble
-
-- `coinflip`: Flips a coin
-- `roll`: Rolls a dice with modifiers
