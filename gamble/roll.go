@@ -18,13 +18,13 @@ const (
 // Roll parses the input string and returns the result of the dice roll along with the individual rolls
 func Roll(input string) (string, int, error) {
 	// Format input string
-	i := strings.ToLower(strings.ReplaceAll(input, " ", ""))
-	if num, err := strconv.Atoi(i); err == nil {
-		i = fmt.Sprintf("d%d", num)
+	formattedInput := strings.ToLower(strings.ReplaceAll(input, " ", ""))
+	if num, err := strconv.Atoi(formattedInput); err == nil {
+		formattedInput = fmt.Sprintf("d%d", num)
 	}
 
 	// Check if the input string matches the dice roll regex
-	matches := regexp.MustCompile(diceRollRegex).FindStringSubmatch(i)
+	matches := regexp.MustCompile(diceRollRegex).FindStringSubmatch(formattedInput)
 	if len(matches) < 1 {
 		return "", 0, errors.New("invalid input format")
 	}
