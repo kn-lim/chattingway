@@ -24,7 +24,7 @@ func GetMCStatus(serverURL string) (bool, int, error) {
 	if err != nil {
 		return false, 0, err
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
