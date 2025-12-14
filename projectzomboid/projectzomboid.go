@@ -3,7 +3,6 @@ package projectzomboid
 import (
 	"context"
 	"errors"
-	"os"
 	"time"
 
 	"github.com/kn-lim/chattingway/aws"
@@ -15,15 +14,15 @@ const (
 )
 
 // Start starts the Project Zomboid server
-func Start() error {
-	if err := aws.StartInstance(context.TODO(), os.Getenv("PZ_HOST_INSTANCE_ID"), os.Getenv("PZ_HOST_REGION")); err != nil {
+func Start(ctx context.Context, instanceID, region, host, password string) error {
+	if err := aws.StartInstance(ctx, instanceID, region); err != nil {
 		return err
 	}
 
 	for {
 		time.Sleep(time.Duration(STATUS_CHECK_INTERVAL) * time.Second)
 
-		if status, _ := Status(); status {
+		if status, _ := Status(host, password); status {
 			break
 		}
 	}
@@ -32,8 +31,8 @@ func Start() error {
 }
 
 // Status returns whether the Project Zomboid server is online or offline
-func Status() (bool, error) {
-	output, err := rcon.Run(os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PASSWORD"), "players")
+func Status(host, password string) (bool, error) {
+	output, err := rcon.Run(host, password, "players")
 	if err != nil {
 		return false, err
 	}
@@ -46,20 +45,20 @@ func Status() (bool, error) {
 }
 
 // Stop stops the Project Zomboid server
-func Stop() error {
-	_, err := rcon.Run(os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PASSWORD"), "quit")
+func Stop(ctx context.Context, instanceID, region, host, password string) error {
+	_, err := rcon.Run(host, password, "quit")
 	if err != nil {
 		return err
 	}
 
-	if err := aws.StopInstance(context.TODO(), os.Getenv("PZ_HOST_INSTANCE_ID"), os.Getenv("PZ_HOST_REGION")); err != nil {
+	if err := aws.StopInstance(ctx, instanceID, region); err != nil {
 		return err
 	}
 
 	for {
 		time.Sleep(time.Duration(STATUS_CHECK_INTERVAL) * time.Second)
 
-		if status, _ := Status(); !status {
+		if status, _ := Status(host, password); !status {
 			break
 		}
 	}
