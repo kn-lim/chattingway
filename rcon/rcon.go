@@ -8,7 +8,7 @@ func Run(host, password, command string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defer conn.Close()
+	defer conn.Close() //nolint:errcheck
 
 	resp, err := conn.Execute(command)
 	if err != nil {
