@@ -14,7 +14,7 @@ const (
 )
 
 // Start starts the Project Zomboid server
-func Start(ctx context.Context, instanceID, region, host, password string) error {
+func Start(ctx context.Context, instanceID, region, host, port, password string) error {
 	if err := aws.StartInstance(ctx, instanceID, region); err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func Start(ctx context.Context, instanceID, region, host, password string) error
 	for {
 		time.Sleep(time.Duration(STATUS_CHECK_INTERVAL) * time.Second)
 
-		if status, _ := Status(host, password); status {
+		if status, _ := Status(host, port, password); status {
 			break
 		}
 	}
@@ -31,8 +31,8 @@ func Start(ctx context.Context, instanceID, region, host, password string) error
 }
 
 // Status returns whether the Project Zomboid server is online or offline
-func Status(host, password string) (bool, error) {
-	output, err := rcon.Run(host, password, "players")
+func Status(host, port, password string) (bool, error) {
+	output, err := rcon.Run(host, port, password, "players")
 	if err != nil {
 		return false, err
 	}
@@ -45,8 +45,8 @@ func Status(host, password string) (bool, error) {
 }
 
 // Stop stops the Project Zomboid server
-func Stop(ctx context.Context, instanceID, region, host, password string) error {
-	_, err := rcon.Run(host, password, "quit")
+func Stop(ctx context.Context, instanceID, region, host, port, password string) error {
+	_, err := rcon.Run(host, port, password, "quit")
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func Stop(ctx context.Context, instanceID, region, host, password string) error 
 	for {
 		time.Sleep(time.Duration(STATUS_CHECK_INTERVAL) * time.Second)
 
-		if status, _ := Status(host, password); !status {
+		if status, _ := Status(host, port, password); !status {
 			break
 		}
 	}
