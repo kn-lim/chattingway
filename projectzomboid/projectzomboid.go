@@ -5,13 +5,14 @@ import (
 	"errors"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/kn-lim/chattingway/aws"
 	"github.com/kn-lim/chattingway/cloudflare"
 	"github.com/kn-lim/chattingway/rcon"
 )
 
 const (
-	SAVE_WAIT_TIME        = 10 // Save wait time in seconds
+	WAIT_TIME             = 10 // Wait time in seconds
 	STATUS_CHECK_INTERVAL = 30 // Status check interval in seconds
 )
 
@@ -19,6 +20,19 @@ const (
 func Start(ctx context.Context, instanceID, region, host, port, password, cfToken, cfZoneID, cfRecordName string) error {
 	if err := aws.StartInstance(ctx, instanceID, region); err != nil {
 		return err
+	}
+
+	for {
+		output, err := aws.GetInstanceState(ctx, instanceID, region)
+		if err != nil {
+			return err
+		}
+
+		if output != string(types.InstanceStateNameRunning) {
+			break
+		}
+
+		time.Sleep(time.Duration(WAIT_TIME) * time.Second)
 	}
 
 	publicIP, err := aws.GetInstancePublicIP(ctx, instanceID, region)
@@ -63,7 +77,7 @@ func Stop(ctx context.Context, instanceID, region, host, port, password, cfToken
 		return err
 	}
 
-	time.Sleep(time.Duration(SAVE_WAIT_TIME) * time.Second)
+	time.Sleep(time.Duration(WAIT_TIME) * time.Second)
 
 	_, err = rcon.Run(host, port, password, "quit")
 	if err != nil {

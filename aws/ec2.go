@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
+// StartInstance starts the provided instance
 func StartInstance(ctx context.Context, instanceID, region string) error {
 	// Setup AWS session
 	cfg, err := getConfig(ctx, region)
@@ -37,6 +38,7 @@ func StartInstance(ctx context.Context, instanceID, region string) error {
 	return nil
 }
 
+// StopInstance stops the provided instance
 func StopInstance(ctx context.Context, instanceID, region string) error {
 	// Setup AWS session
 	cfg, err := getConfig(ctx, region)
@@ -65,6 +67,7 @@ func StopInstance(ctx context.Context, instanceID, region string) error {
 	return nil
 }
 
+// GetInstancePublicIP returns the public IP of the instance
 func GetInstancePublicIP(ctx context.Context, instanceID, region string) (string, error) {
 	// Setup AWS session
 	cfg, err := getConfig(ctx, region)
@@ -86,6 +89,24 @@ func GetInstancePublicIP(ctx context.Context, instanceID, region string) (string
 	return *instance.PublicIpAddress, nil
 }
 
+// GetInstanceState returns the state of the instance
+func GetInstanceState(ctx context.Context, instanceID, region string) (string, error) {
+	// Setup AWS session
+	cfg, err := getConfig(ctx, region)
+	if err != nil {
+		return "", err
+	}
+
+	// Get EC2 instance
+	_, instance, err := getInstance(ctx, cfg, instanceID)
+	if err != nil {
+		return "", err
+	}
+
+	return string(instance.State.Name), nil
+}
+
+// getInstance returns the instance struct from the provided instance ID
 func getInstance(ctx context.Context, cfg aws.Config, instanceID string) (*ec2.Client, types.Instance, error) {
 	client := ec2.NewFromConfig(cfg)
 
