@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	SAVE_WAIT_TIME        = 10 // Save wait time in seconds
 	STATUS_CHECK_INTERVAL = 30 // Status check interval in seconds
 )
 
@@ -46,12 +47,16 @@ func Status(host, port, password string) (bool, error) {
 
 // Stop stops the Project Zomboid server
 func Stop(ctx context.Context, instanceID, region, host, port, password string) error {
-	_, err := rcon.Run(host, port, password, "quit")
+	var err error
+	_, err = rcon.Run(host, port, password, "save")
 	if err != nil {
 		return err
 	}
 
-	if err := aws.StopInstance(ctx, instanceID, region); err != nil {
+	time.Sleep(time.Duration(SAVE_WAIT_TIME) * time.Second)
+
+	_, err = rcon.Run(host, port, password, "quit")
+	if err != nil {
 		return err
 	}
 
@@ -61,6 +66,10 @@ func Stop(ctx context.Context, instanceID, region, host, port, password string) 
 		if status, _ := Status(host, port, password); !status {
 			break
 		}
+	}
+
+	if err := aws.StopInstance(ctx, instanceID, region); err != nil {
+		return err
 	}
 
 	return nil
