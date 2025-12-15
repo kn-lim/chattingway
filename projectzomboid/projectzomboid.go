@@ -28,7 +28,7 @@ func Start(ctx context.Context, instanceID, region, host, port, password, cfToke
 			return err
 		}
 
-		if output != string(types.InstanceStateNameRunning) {
+		if output == string(types.InstanceStateNameRunning) {
 			break
 		}
 
