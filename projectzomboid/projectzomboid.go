@@ -25,7 +25,9 @@ func Start(ctx context.Context, instanceID, region, host, port, password, cfToke
 	for {
 		output, err := aws.GetInstanceState(ctx, instanceID, region)
 		if err != nil {
-			return err
+			if err != errors.New(aws.ERR_INSTANCE_NO_PUBLIC_IP) {
+				return err
+			}
 		}
 
 		if output == string(types.InstanceStateNameRunning) {

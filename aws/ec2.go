@@ -83,7 +83,7 @@ func GetInstancePublicIP(ctx context.Context, instanceID, region string) (string
 
 	// Return public IP address
 	if instance.PublicIpAddress == nil {
-		return "", errors.New("instance does not have a public IP")
+		return "", errors.New(ERR_INSTANCE_NO_PUBLIC_IP)
 	}
 
 	return *instance.PublicIpAddress, nil
