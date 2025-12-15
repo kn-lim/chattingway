@@ -2,6 +2,7 @@ package aws
 
 import (
 	"context"
+	"errors"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -62,6 +63,27 @@ func StopInstance(ctx context.Context, instanceID, region string) error {
 	}
 
 	return nil
+}
+
+func GetInstancePublicIP(ctx context.Context, instanceID, region string) (string, error) {
+	// Setup AWS session
+	cfg, err := getConfig(ctx, region)
+	if err != nil {
+		return "", err
+	}
+
+	// Get EC2 instance
+	_, instance, err := getInstance(ctx, cfg, instanceID)
+	if err != nil {
+		return "", err
+	}
+
+	// Return public IP address
+	if instance.PublicIpAddress == nil {
+		return "", errors.New("instance does not have a public IP")
+	}
+
+	return *instance.PublicIpAddress, nil
 }
 
 func getInstance(ctx context.Context, cfg aws.Config, instanceID string) (*ec2.Client, types.Instance, error) {

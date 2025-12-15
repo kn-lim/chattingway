@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/kn-lim/chattingway/aws"
+	"github.com/kn-lim/chattingway/cloudflare"
 	"github.com/kn-lim/chattingway/rcon"
 )
 
@@ -15,8 +16,17 @@ const (
 )
 
 // Start starts the Project Zomboid server
-func Start(ctx context.Context, instanceID, region, host, port, password string) error {
+func Start(ctx context.Context, instanceID, region, host, port, password, cfToken, cfZoneID, cfRecordName string) error {
 	if err := aws.StartInstance(ctx, instanceID, region); err != nil {
+		return err
+	}
+
+	publicIP, err := aws.GetInstancePublicIP(ctx, instanceID, region)
+	if err != nil {
+		return err
+	}
+
+	if err := cloudflare.CreateDNSRecord(ctx, cfToken, cfZoneID, cfRecordName, publicIP); err != nil {
 		return err
 	}
 
@@ -46,7 +56,7 @@ func Status(host, port, password string) (bool, error) {
 }
 
 // Stop stops the Project Zomboid server
-func Stop(ctx context.Context, instanceID, region, host, port, password string) error {
+func Stop(ctx context.Context, instanceID, region, host, port, password, cfToken, cfZoneID, cfRecordName string) error {
 	var err error
 	_, err = rcon.Run(host, port, password, "save")
 	if err != nil {
@@ -69,6 +79,10 @@ func Stop(ctx context.Context, instanceID, region, host, port, password string) 
 	}
 
 	if err := aws.StopInstance(ctx, instanceID, region); err != nil {
+		return err
+	}
+
+	if err := cloudflare.DeleteDNSRecord(ctx, cfToken, cfZoneID, cfRecordName); err != nil {
 		return err
 	}
 
