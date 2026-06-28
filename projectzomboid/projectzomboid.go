@@ -14,12 +14,12 @@ import (
 )
 
 const (
-	// WAIT_TIME is the delay, in seconds, used between sequential server operations such as saving and shutting down.
-	WAIT_TIME = 10
+	// waitTime is the delay, in seconds, used between sequential server operations such as saving and shutting down.
+	waitTime = 10
 
-	// STATUS_CHECK_INTERVAL is the interval, in seconds, between server status polls while waiting for the server to
+	// statusCheckInterval is the interval, in seconds, between server status polls while waiting for the server to
 	// come online or go offline.
-	STATUS_CHECK_INTERVAL = 30
+	statusCheckInterval = 30
 )
 
 // Start boots the Project Zomboid server: it starts the EC2 host, waits for it to run, points the Cloudflare DNS record
@@ -41,7 +41,7 @@ func Start(ctx context.Context, instanceID, region, host, port, password, cfToke
 			break
 		}
 
-		time.Sleep(time.Duration(WAIT_TIME) * time.Second)
+		time.Sleep(time.Duration(waitTime) * time.Second)
 	}
 
 	publicIP, err := aws.InstancePublicIP(ctx, instanceID, region)
@@ -54,7 +54,7 @@ func Start(ctx context.Context, instanceID, region, host, port, password, cfToke
 	}
 
 	for {
-		time.Sleep(time.Duration(STATUS_CHECK_INTERVAL) * time.Second)
+		time.Sleep(time.Duration(statusCheckInterval) * time.Second)
 
 		if status, _ := Status(host, port, password); status {
 			break
@@ -72,7 +72,7 @@ func Status(host, port, password string) (bool, error) {
 	}
 
 	if output == "" {
-		return false, errors.New("received empty output for status")
+		return false, errors.New("projectzomboid: received empty output for status")
 	}
 
 	return true, nil
@@ -87,7 +87,7 @@ func Stop(ctx context.Context, instanceID, region, host, port, password, cfToken
 		return err
 	}
 
-	time.Sleep(time.Duration(WAIT_TIME) * time.Second)
+	time.Sleep(time.Duration(waitTime) * time.Second)
 
 	_, err = rcon.Run(host, port, password, "quit")
 	if err != nil {
@@ -95,7 +95,7 @@ func Stop(ctx context.Context, instanceID, region, host, port, password, cfToken
 	}
 
 	for {
-		time.Sleep(time.Duration(STATUS_CHECK_INTERVAL) * time.Second)
+		time.Sleep(time.Duration(statusCheckInterval) * time.Second)
 
 		if status, _ := Status(host, port, password); !status {
 			break
