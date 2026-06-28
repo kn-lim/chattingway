@@ -1,6 +1,7 @@
+// Package healthcheck provides simple liveness commands for verifying that a bot is responsive.
 package healthcheck
 
-// Ping returns a string with the message "Pong!"
+// Ping returns "Pong!".
 func Ping() string {
 	return "Pong!"
 }

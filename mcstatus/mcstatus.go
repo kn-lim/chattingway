@@ -1,3 +1,4 @@
+// Package mcstatus reports the status of a Minecraft Java server via the mcstatus.io API.
 package mcstatus
 
 import (
@@ -7,18 +8,22 @@ import (
 	"net/http"
 )
 
-const (
-	BASE_URL = "https://api.mcstatus.io/v2/status/java"
-)
+// BASE_URL is the mcstatus.io endpoint queried for Java server status.
+const BASE_URL = "https://api.mcstatus.io/v2/status/java"
 
+// MCStatusResponse holds the subset of the mcstatus.io response that is parsed.
 type MCStatusResponse struct {
-	Online  bool `json:"online"`
+	// Online reports whether the server is reachable.
+	Online bool `json:"online"`
+
+	// Players holds player count information for the server.
 	Players struct {
+		// Online is the number of players currently connected.
 		Online int `json:"online"`
 	} `json:"players"`
 }
 
-// GetMCStatus checks with mcstatus.io to get information about the Minecraft server
+// GetMCStatus queries mcstatus.io for the given Minecraft server and returns whether it is online and the number of players currently connected.
 func GetMCStatus(serverURL string) (bool, int, error) {
 	response, err := http.Get(fmt.Sprintf("%s/%s", BASE_URL, serverURL))
 	if err != nil {

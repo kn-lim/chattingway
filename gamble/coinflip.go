@@ -1,3 +1,4 @@
+// Package gamble provides chance-based games such as coin flips and dice rolls.
 package gamble
 
 import (
@@ -5,7 +6,7 @@ import (
 	"time"
 )
 
-// CoinFlip returns either "Heads" or "Tails"
+// CoinFlip returns "Heads" or "Tails" with equal probability.
 func CoinFlip() string {
 	// Create a new rand.Rand instance with a seed
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))

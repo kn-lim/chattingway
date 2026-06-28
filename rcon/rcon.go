@@ -1,3 +1,4 @@
+// Package rcon provides a helper for executing commands against a server over the RCON protocol.
 package rcon
 
 import (
@@ -6,7 +7,8 @@ import (
 	"github.com/gorcon/rcon"
 )
 
-// Run executes the provided RCON command
+// Run opens an RCON connection to host:port, authenticates with password, executes command, and returns the server's response.
+// The connection is closed before returning.
 func Run(host, port, password, command string) (string, error) {
 	conn, err := rcon.Dial(fmt.Sprintf("%s:%s", host, port), password)
 	if err != nil {

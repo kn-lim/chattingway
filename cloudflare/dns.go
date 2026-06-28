@@ -1,3 +1,4 @@
+// Package cloudflare provides helpers for managing Cloudflare DNS records used by the chat bots.
 package cloudflare
 
 import (
@@ -9,7 +10,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-// CreateDNSRecord creates a DNS A record pointing to the given IP address
+// CreateDNSRecord creates an unproxied DNS A record named recordName in the given zone, pointing to ipAddress with an automatic TTL.
+// The apiToken is used to authenticate with the Cloudflare API.
 func CreateDNSRecord(ctx context.Context, apiToken string, zoneID string, recordName string, ipAddress string) error {
 	client := cloudflare.NewClient(option.WithAPIToken(apiToken))
 
@@ -27,7 +29,9 @@ func CreateDNSRecord(ctx context.Context, apiToken string, zoneID string, record
 	return err
 }
 
-// DeleteDNSRecord finds and deletes a DNS record by name
+// DeleteDNSRecord finds and deletes the A record named recordName in the given zone.
+// It returns an error if no matching record exists or if more than one is found.
+// The apiToken is used to authenticate with the Cloudflare API.
 func DeleteDNSRecord(ctx context.Context, apiToken string, zoneID string, recordName string) error {
 	client := cloudflare.NewClient(option.WithAPIToken(apiToken))
 

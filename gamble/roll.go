@@ -15,7 +15,9 @@ const (
 	modifierRegex = `[+-]?\d+`
 )
 
-// Roll parses the input string and returns the result of the dice roll along with the individual rolls
+// Roll parses standard dice notation (for example "2d6", "d20" or "3d8+2-1") and rolls the dice.
+// A bare number is treated as the number of sides on a single die.
+// It returns a human-readable breakdown of the individual rolls and modifiers, the final total, and an error if the input is malformed.
 func Roll(input string) (string, int, error) {
 	// Format input string
 	formattedInput := strings.ToLower(strings.ReplaceAll(input, " ", ""))
@@ -83,7 +85,7 @@ func Roll(input string) (string, int, error) {
 	return rollOutput, result, nil
 }
 
-// evaluateModifiers evaluates the arithmetic expression in the modifiers
+// evaluateModifiers evaluates the arithmetic expression in the modifiers.
 func evaluateModifiers(modifiers string) (int, error) {
 	if modifiers == "" {
 		return 0, nil

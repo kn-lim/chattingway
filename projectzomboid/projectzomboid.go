@@ -1,3 +1,5 @@
+// Package projectzomboid orchestrates the lifecycle of a Project Zomboid game server, coordinating its AWS EC2 host,
+// Cloudflare DNS record, and RCON connection.
 package projectzomboid
 
 import (
@@ -12,11 +14,16 @@ import (
 )
 
 const (
-	WAIT_TIME             = 10 // Wait time in seconds
-	STATUS_CHECK_INTERVAL = 30 // Status check interval in seconds
+	// WAIT_TIME is the delay, in seconds, used between sequential server operations such as saving and shutting down.
+	WAIT_TIME = 10
+
+	// STATUS_CHECK_INTERVAL is the interval, in seconds, between server status polls while waiting for the server to
+	// come online or go offline.
+	STATUS_CHECK_INTERVAL = 30
 )
 
-// Start starts the Project Zomboid server
+// Start boots the Project Zomboid server: it starts the EC2 host, waits for it to run, points the Cloudflare DNS record
+// at the host's public IP, and blocks until the game server responds to RCON.
 func Start(ctx context.Context, instanceID, region, host, port, password, cfToken, cfZoneID, cfRecordName string) error {
 	if err := aws.StartInstance(ctx, instanceID, region); err != nil {
 		return err
@@ -57,7 +64,7 @@ func Start(ctx context.Context, instanceID, region, host, port, password, cfToke
 	return nil
 }
 
-// Status returns whether the Project Zomboid server is online or offline
+// Status reports whether the Project Zomboid server is online by issuing an RCON "players" command to the given host.
 func Status(host, port, password string) (bool, error) {
 	output, err := rcon.Run(host, port, password, "players")
 	if err != nil {
@@ -71,7 +78,8 @@ func Status(host, port, password string) (bool, error) {
 	return true, nil
 }
 
-// Stop stops the Project Zomboid server
+// Stop shuts down the Project Zomboid server: it saves and quits the game via RCON, waits for the server to go offline,
+// stops the EC2 host, and removes the Cloudflare DNS record.
 func Stop(ctx context.Context, instanceID, region, host, port, password, cfToken, cfZoneID, cfRecordName string) error {
 	var err error
 	_, err = rcon.Run(host, port, password, "save")

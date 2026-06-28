@@ -9,7 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
-// StartInstance starts the provided instance
+// StartInstance starts the EC2 instance identified by instanceID in the given region.
+// It is a no-op if the instance is not currently in the stopped state.
 func StartInstance(ctx context.Context, instanceID, region string) error {
 	// Setup AWS session
 	cfg, err := getConfig(ctx, region)
@@ -38,7 +39,8 @@ func StartInstance(ctx context.Context, instanceID, region string) error {
 	return nil
 }
 
-// StopInstance stops the provided instance
+// StopInstance stops the EC2 instance identified by instanceID in the given region.
+// It is a no-op if the instance is not currently in the running state.
 func StopInstance(ctx context.Context, instanceID, region string) error {
 	// Setup AWS session
 	cfg, err := getConfig(ctx, region)
@@ -67,7 +69,8 @@ func StopInstance(ctx context.Context, instanceID, region string) error {
 	return nil
 }
 
-// GetInstancePublicIP returns the public IP of the instance
+// GetInstancePublicIP returns the public IPv4 address of the EC2 instance identified by instanceID in the given region.
+// It returns an error if the instance has no public IP assigned.
 func GetInstancePublicIP(ctx context.Context, instanceID, region string) (string, error) {
 	// Setup AWS session
 	cfg, err := getConfig(ctx, region)
@@ -89,7 +92,8 @@ func GetInstancePublicIP(ctx context.Context, instanceID, region string) (string
 	return *instance.PublicIpAddress, nil
 }
 
-// GetInstanceState returns the state of the instance
+// GetInstanceState returns the current lifecycle state of the EC2 instance identified by instanceID in the given region
+// (for example "running" or "stopped").
 func GetInstanceState(ctx context.Context, instanceID, region string) (string, error) {
 	// Setup AWS session
 	cfg, err := getConfig(ctx, region)
@@ -106,7 +110,7 @@ func GetInstanceState(ctx context.Context, instanceID, region string) (string, e
 	return string(instance.State.Name), nil
 }
 
-// getInstance returns the instance struct from the provided instance ID
+// getInstance describes the instance identified by instanceID and returns the EC2 client along with the resolved instance.
 func getInstance(ctx context.Context, cfg aws.Config, instanceID string) (*ec2.Client, types.Instance, error) {
 	client := ec2.NewFromConfig(cfg)
 
