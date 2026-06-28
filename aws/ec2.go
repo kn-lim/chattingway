@@ -9,17 +9,23 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
+// ErrNoPublicIP is returned when an instance has no public IP address assigned.
+var ErrNoPublicIP = errors.New("aws: instance does not have a public IP")
+
+// ErrInstanceNotFound is returned when no instance matches the given ID.
+var ErrInstanceNotFound = errors.New("aws: instance not found")
+
 // StartInstance starts the EC2 instance identified by instanceID in the given region.
 // It is a no-op if the instance is not currently in the stopped state.
 func StartInstance(ctx context.Context, instanceID, region string) error {
 	// Setup AWS session
-	cfg, err := getConfig(ctx, region)
+	cfg, err := loadConfig(ctx, region)
 	if err != nil {
 		return err
 	}
 
 	// Get EC2 instance
-	client, instance, err := getInstance(ctx, cfg, instanceID)
+	client, instance, err := describeInstance(ctx, cfg, instanceID)
 	if err != nil {
 		return err
 	}
@@ -43,13 +49,13 @@ func StartInstance(ctx context.Context, instanceID, region string) error {
 // It is a no-op if the instance is not currently in the running state.
 func StopInstance(ctx context.Context, instanceID, region string) error {
 	// Setup AWS session
-	cfg, err := getConfig(ctx, region)
+	cfg, err := loadConfig(ctx, region)
 	if err != nil {
 		return err
 	}
 
 	// Get EC2 instance
-	client, instance, err := getInstance(ctx, cfg, instanceID)
+	client, instance, err := describeInstance(ctx, cfg, instanceID)
 	if err != nil {
 		return err
 	}
@@ -69,40 +75,40 @@ func StopInstance(ctx context.Context, instanceID, region string) error {
 	return nil
 }
 
-// GetInstancePublicIP returns the public IPv4 address of the EC2 instance identified by instanceID in the given region.
-// It returns an error if the instance has no public IP assigned.
-func GetInstancePublicIP(ctx context.Context, instanceID, region string) (string, error) {
+// InstancePublicIP returns the public IPv4 address of the EC2 instance identified by instanceID in the given region.
+// It returns ErrNoPublicIP if the instance has no public IP assigned.
+func InstancePublicIP(ctx context.Context, instanceID, region string) (string, error) {
 	// Setup AWS session
-	cfg, err := getConfig(ctx, region)
+	cfg, err := loadConfig(ctx, region)
 	if err != nil {
 		return "", err
 	}
 
 	// Get EC2 instance
-	_, instance, err := getInstance(ctx, cfg, instanceID)
+	_, instance, err := describeInstance(ctx, cfg, instanceID)
 	if err != nil {
 		return "", err
 	}
 
 	// Return public IP address
 	if instance.PublicIpAddress == nil {
-		return "", errors.New(ERR_INSTANCE_NO_PUBLIC_IP)
+		return "", ErrNoPublicIP
 	}
 
 	return *instance.PublicIpAddress, nil
 }
 
-// GetInstanceState returns the current lifecycle state of the EC2 instance identified by instanceID in the given region
+// InstanceState returns the current lifecycle state of the EC2 instance identified by instanceID in the given region
 // (for example "running" or "stopped").
-func GetInstanceState(ctx context.Context, instanceID, region string) (string, error) {
+func InstanceState(ctx context.Context, instanceID, region string) (string, error) {
 	// Setup AWS session
-	cfg, err := getConfig(ctx, region)
+	cfg, err := loadConfig(ctx, region)
 	if err != nil {
 		return "", err
 	}
 
 	// Get EC2 instance
-	_, instance, err := getInstance(ctx, cfg, instanceID)
+	_, instance, err := describeInstance(ctx, cfg, instanceID)
 	if err != nil {
 		return "", err
 	}
@@ -110,8 +116,9 @@ func GetInstanceState(ctx context.Context, instanceID, region string) (string, e
 	return string(instance.State.Name), nil
 }
 
-// getInstance describes the instance identified by instanceID and returns the EC2 client along with the resolved instance.
-func getInstance(ctx context.Context, cfg aws.Config, instanceID string) (*ec2.Client, types.Instance, error) {
+// describeInstance describes the instance identified by instanceID and returns the EC2 client along with the resolved instance.
+// It returns ErrInstanceNotFound if no matching instance exists.
+func describeInstance(ctx context.Context, cfg aws.Config, instanceID string) (*ec2.Client, types.Instance, error) {
 	client := ec2.NewFromConfig(cfg)
 
 	input := &ec2.DescribeInstancesInput{
@@ -125,7 +132,7 @@ func getInstance(ctx context.Context, cfg aws.Config, instanceID string) (*ec2.C
 		return nil, types.Instance{}, err
 	}
 	if len(result.Reservations) == 0 || len(result.Reservations[0].Instances) == 0 {
-		return nil, types.Instance{}, err
+		return nil, types.Instance{}, ErrInstanceNotFound
 	}
 
 	return client, result.Reservations[0].Instances[0], nil

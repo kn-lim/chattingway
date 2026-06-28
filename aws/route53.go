@@ -8,8 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/route53/types"
 )
 
-// ROUTE53_TTL is the time-to-live, in seconds, applied to managed Route 53 records.
-const ROUTE53_TTL = 300
+// recordTTL is the time-to-live, in seconds, applied to managed Route 53 records.
+const recordTTL = 300
 
 // CreateRoute53Record upserts an A record named url in the given hosted zone so that it resolves to publicIP.
 // An existing record with the same name is overwritten.
@@ -25,7 +25,7 @@ func CreateRoute53Record(ctx context.Context, cfg aws.Config, publicIP, zoneID, 
 					ResourceRecordSet: &types.ResourceRecordSet{
 						Name: &url,
 						Type: types.RRTypeA,
-						TTL:  aws.Int64(ROUTE53_TTL),
+						TTL:  aws.Int64(recordTTL),
 						ResourceRecords: []types.ResourceRecord{
 							{
 								Value: &publicIP,
@@ -56,7 +56,7 @@ func DeleteRoute53Record(ctx context.Context, cfg aws.Config, publicIP, zoneID, 
 					ResourceRecordSet: &types.ResourceRecordSet{
 						Name: &url,
 						Type: types.RRTypeA,
-						TTL:  aws.Int64(ROUTE53_TTL),
+						TTL:  aws.Int64(recordTTL),
 						ResourceRecords: []types.ResourceRecord{
 							{
 								Value: &publicIP,

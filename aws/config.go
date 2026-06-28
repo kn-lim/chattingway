@@ -8,8 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 )
 
-// getConfig loads the default AWS configuration scoped to the given region.
-func getConfig(ctx context.Context, region string) (aws.Config, error) {
+// loadConfig loads the default AWS configuration scoped to the given region.
+func loadConfig(ctx context.Context, region string) (aws.Config, error) {
 	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(region))
 	if err != nil {
 		return aws.Config{}, err

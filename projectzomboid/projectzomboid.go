@@ -30,9 +30,9 @@ func Start(ctx context.Context, instanceID, region, host, port, password, cfToke
 	}
 
 	for {
-		output, err := aws.GetInstanceState(ctx, instanceID, region)
+		output, err := aws.InstanceState(ctx, instanceID, region)
 		if err != nil {
-			if err != errors.New(aws.ERR_INSTANCE_NO_PUBLIC_IP) {
+			if !errors.Is(err, aws.ErrNoPublicIP) {
 				return err
 			}
 		}
@@ -44,7 +44,7 @@ func Start(ctx context.Context, instanceID, region, host, port, password, cfToke
 		time.Sleep(time.Duration(WAIT_TIME) * time.Second)
 	}
 
-	publicIP, err := aws.GetInstancePublicIP(ctx, instanceID, region)
+	publicIP, err := aws.InstancePublicIP(ctx, instanceID, region)
 	if err != nil {
 		return err
 	}
