@@ -12,7 +12,7 @@ func TestEcho(t *testing.T) {
 	user := "testUser"
 	msg := "testMessage"
 
-	expected := fmt.Sprintf("Received Echo from %s: `%v`", user, msg)
+	expected := fmt.Sprintf("Received Echo from %s: `%s`", user, msg)
 	actual := healthcheck.Echo(user, msg)
 
 	assert.Equal(t, expected, actual)
