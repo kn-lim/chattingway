@@ -4,7 +4,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/kn-lim/chattingway.svg)](https://pkg.go.dev/github.com/kn-lim/chattingway)
 ![GitHub Workflow Status - Release](https://img.shields.io/github/actions/workflow/status/kn-lim/chattingway/release.yaml)
 ![GitHub Workflow Status - Test](https://img.shields.io/github/actions/workflow/status/kn-lim/chattingway/test.yaml?label=tests)
-[![Coverage Status](https://coveralls.io/repos/github/kn-lim/chattingway/badge.svg?branch=main)](https://coveralls.io/github/kn-lim/chattingway?branch=main)
+[![codecov](https://codecov.io/gh/kn-lim/chattingway/branch/main/graph/badge.svg)](https://codecov.io/gh/kn-lim/chattingway)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kn-lim/chattingway)](https://goreportcard.com/report/github.com/kn-lim/chattingway)
 ![License](https://img.shields.io/github/license/kn-lim/chattingway)
 
