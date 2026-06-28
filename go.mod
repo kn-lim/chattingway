@@ -1,8 +1,6 @@
 module github.com/kn-lim/chattingway
 
-go 1.26.0
-
-toolchain go1.26.4
+go 1.26.4
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.42.0
