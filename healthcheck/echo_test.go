@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/kn-lim/chattingway/healthcheck"
+	"github.com/kn-lim/chattingway/v2/healthcheck"
 	"github.com/stretchr/testify/assert"
 )
 

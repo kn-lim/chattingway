@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/kn-lim/chattingway/aws"
-	"github.com/kn-lim/chattingway/cloudflare"
-	"github.com/kn-lim/chattingway/rcon"
+	"github.com/kn-lim/chattingway/v2/aws"
+	"github.com/kn-lim/chattingway/v2/cloudflare"
+	"github.com/kn-lim/chattingway/v2/rcon"
 )
 
 const (

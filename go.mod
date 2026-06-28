@@ -1,4 +1,4 @@
-module github.com/kn-lim/chattingway
+module github.com/kn-lim/chattingway/v2
 
 go 1.26.4
 

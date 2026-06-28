@@ -3,7 +3,7 @@ package gamble_test
 import (
 	"testing"
 
-	"github.com/kn-lim/chattingway/gamble"
+	"github.com/kn-lim/chattingway/v2/gamble"
 	"github.com/stretchr/testify/assert"
 )
 
