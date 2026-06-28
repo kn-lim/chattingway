@@ -31,10 +31,8 @@ func Start(ctx context.Context, instanceID, region, host, port, password, cfToke
 
 	for {
 		output, err := aws.InstanceState(ctx, instanceID, region)
-		if err != nil {
-			if !errors.Is(err, aws.ErrNoPublicIP) {
-				return err
-			}
+		if err != nil && !errors.Is(err, aws.ErrInstanceNotFound) {
+			return err
 		}
 
 		if output == string(types.InstanceStateNameRunning) {
