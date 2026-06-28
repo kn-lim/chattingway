@@ -8,11 +8,11 @@ import (
 	"net/http"
 )
 
-// BASE_URL is the mcstatus.io endpoint queried for Java server status.
-const BASE_URL = "https://api.mcstatus.io/v2/status/java"
+// baseURL is the mcstatus.io endpoint queried for Java server status.
+const baseURL = "https://api.mcstatus.io/v2/status/java"
 
-// MCStatusResponse holds the subset of the mcstatus.io response that is parsed.
-type MCStatusResponse struct {
+// response holds the subset of the mcstatus.io response that is parsed.
+type response struct {
 	// Online reports whether the server is reachable.
 	Online bool `json:"online"`
 
@@ -23,22 +23,21 @@ type MCStatusResponse struct {
 	} `json:"players"`
 }
 
-// GetMCStatus queries mcstatus.io for the given Minecraft server and returns whether it is online and the number of players currently connected.
-func GetMCStatus(serverURL string) (bool, int, error) {
-	response, err := http.Get(fmt.Sprintf("%s/%s", BASE_URL, serverURL))
+// Query queries mcstatus.io for the given Minecraft server and returns whether it is online and the number of players currently connected.
+func Query(serverURL string) (bool, int, error) {
+	resp, err := http.Get(fmt.Sprintf("%s/%s", baseURL, serverURL))
 	if err != nil {
 		return false, 0, err
 	}
-	defer func() { _ = response.Body.Close() }()
+	defer func() { _ = resp.Body.Close() }()
 
-	body, err := io.ReadAll(response.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return false, 0, err
 	}
 
-	var status MCStatusResponse
-	err = json.Unmarshal(body, &status)
-	if err != nil {
+	var status response
+	if err := json.Unmarshal(body, &status); err != nil {
 		return false, 0, err
 	}
 
