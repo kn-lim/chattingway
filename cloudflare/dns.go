@@ -12,7 +12,7 @@ import (
 
 // CreateDNSRecord creates an unproxied DNS A record named recordName in the given zone, pointing to ipAddress with an automatic TTL.
 // The apiToken is used to authenticate with the Cloudflare API.
-func CreateDNSRecord(ctx context.Context, apiToken string, zoneID string, recordName string, ipAddress string) error {
+func CreateDNSRecord(ctx context.Context, apiToken, zoneID, recordName, ipAddress string) error {
 	client := cloudflare.NewClient(option.WithAPIToken(apiToken))
 
 	_, err := client.DNS.Records.New(ctx, dns.RecordNewParams{
@@ -32,7 +32,7 @@ func CreateDNSRecord(ctx context.Context, apiToken string, zoneID string, record
 // DeleteDNSRecord finds and deletes the A record named recordName in the given zone.
 // It returns an error if no matching record exists or if more than one is found.
 // The apiToken is used to authenticate with the Cloudflare API.
-func DeleteDNSRecord(ctx context.Context, apiToken string, zoneID string, recordName string) error {
+func DeleteDNSRecord(ctx context.Context, apiToken, zoneID, recordName string) error {
 	client := cloudflare.NewClient(option.WithAPIToken(apiToken))
 
 	page, err := client.DNS.Records.List(ctx, dns.RecordListParams{
@@ -43,20 +43,20 @@ func DeleteDNSRecord(ctx context.Context, apiToken string, zoneID string, record
 		Type: cloudflare.F(dns.RecordListParamsTypeA),
 	})
 	if err != nil {
-		return fmt.Errorf("failed to list records: %w", err)
+		return fmt.Errorf("cloudflare: list records: %w", err)
 	}
 
 	if len(page.Result) == 0 {
-		return fmt.Errorf("DNS record not found: %s", recordName)
+		return fmt.Errorf("cloudflare: DNS record not found: %s", recordName)
 	} else if len(page.Result) > 1 {
-		return fmt.Errorf("found multiple A records for %s", recordName)
+		return fmt.Errorf("cloudflare: found multiple A records for %s", recordName)
 	}
 
 	_, err = client.DNS.Records.Delete(ctx, page.Result[0].ID, dns.RecordDeleteParams{
 		ZoneID: cloudflare.F(zoneID),
 	})
 	if err != nil {
-		return fmt.Errorf("failed to delete record: %w", err)
+		return fmt.Errorf("cloudflare: delete record: %w", err)
 	}
 
 	return nil
