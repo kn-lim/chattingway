@@ -28,37 +28,37 @@ func Roll(input string) (string, int, error) {
 	// Check if the input string matches the dice roll regex
 	matches := regexp.MustCompile(diceRollRegex).FindStringSubmatch(formattedInput)
 	if len(matches) < 1 {
-		return "", 0, errors.New("invalid input format")
+		return "", 0, errors.New("gamble: invalid input format")
 	}
 
 	// Parse the number of rolls (default to 1 if not present)
-	numRolls := 1
+	rollCount := 1
 	if matches[1] != "" {
 		var err error
-		numRolls, err = strconv.Atoi(matches[1])
+		rollCount, err = strconv.Atoi(matches[1])
 		if err != nil {
-			return "", 0, fmt.Errorf("invalid number of rolls: %v", err)
+			return "", 0, fmt.Errorf("gamble: invalid number of rolls: %w", err)
 		}
 	}
 
 	// Parse the number of sides on the dice
 	sides, err := strconv.Atoi(matches[2])
 	if err != nil {
-		return "", 0, fmt.Errorf("invalid number of sides: %v", err)
+		return "", 0, fmt.Errorf("gamble: invalid number of sides: %w", err)
 	}
 
 	// Parse the modifiers and evaluate it
 	modifiers := matches[3]
 	modifier, err := evaluateModifiers(modifiers)
 	if err != nil {
-		return "", 0, fmt.Errorf("invalid modifier: %v", err)
+		return "", 0, fmt.Errorf("gamble: invalid modifier: %w", err)
 	}
 
 	// Roll the dice and sum the results
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	totalRoll := 0
 	var rolls []int
-	for i := 0; i < numRolls; i++ {
+	for range rollCount {
 		roll := r.Intn(sides) + 1
 		rolls = append(rolls, roll)
 		totalRoll += roll

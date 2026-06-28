@@ -14,7 +14,7 @@ func CoinFlip() string {
 	// Generate a random number (0 or 1)
 	if r.Intn(2) == 0 {
 		return "Heads"
-	} else {
-		return "Tails"
 	}
+
+	return "Tails"
 }
