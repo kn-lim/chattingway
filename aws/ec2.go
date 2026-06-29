@@ -9,11 +9,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
-// ErrNoPublicIP is returned when an instance has no public IP address assigned.
-var ErrNoPublicIP = errors.New("aws: instance does not have a public IP")
+var (
+	// ErrNoPublicIP is returned when an instance has no public IP address assigned.
+	ErrNoPublicIP = errors.New("aws: instance does not have a public IP")
 
-// ErrInstanceNotFound is returned when no instance matches the given ID.
-var ErrInstanceNotFound = errors.New("aws: instance not found")
+	// ErrInstanceNotFound is returned when no instance matches the given ID.
+	ErrInstanceNotFound = errors.New("aws: instance not found")
+)
 
 // StartInstance starts the EC2 instance identified by instanceID in the given region.
 // It is a no-op if the instance is not currently in the stopped state.
