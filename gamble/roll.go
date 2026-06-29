@@ -3,11 +3,10 @@ package gamble
 import (
 	"errors"
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 )
 
 const (
@@ -55,11 +54,10 @@ func Roll(input string) (string, int, error) {
 	}
 
 	// Roll the dice and sum the results
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	totalRoll := 0
 	var rolls []int
 	for range rollCount {
-		roll := r.Intn(sides) + 1
+		roll := rand.IntN(sides) + 1
 		rolls = append(rolls, roll)
 		totalRoll += roll
 	}
