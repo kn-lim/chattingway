@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.30
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.316.1
 	github.com/aws/aws-sdk-go-v2/service/route53 v1.64.1
-	github.com/cloudflare/cloudflare-go/v7 v7.6.0
+	github.com/cloudflare/cloudflare-go/v7 v7.7.0
 	github.com/gorcon/rcon v1.4.0
 	github.com/stretchr/testify v1.11.1
 )
