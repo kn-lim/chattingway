@@ -5,10 +5,11 @@
 ![GitHub Workflow Status - Release](https://img.shields.io/github/actions/workflow/status/kn-lim/chattingway/release.yaml)
 ![GitHub Workflow Status - Test](https://img.shields.io/github/actions/workflow/status/kn-lim/chattingway/test.yaml?label=tests)
 [![codecov](https://codecov.io/gh/kn-lim/chattingway/branch/main/graph/badge.svg)](https://codecov.io/gh/kn-lim/chattingway)
-[![Go Report Card](https://goreportcard.com/badge/github.com/kn-lim/chattingway/v2)](https://goreportcard.com/report/github.com/kn-lim/chattingway/v2)
 ![License](https://img.shields.io/github/license/kn-lim/chattingway)
 
-Module for my chat bots to reuse code:
+Go module holds the shared code for my chat bots:
 
 - [dreamingway-bot](https://github.com/kn-lim/dreamingway-bot) (Discord)
-- [slackingway-bot](https://github.com/kn-lim/slackingway-bot) (Slack)
+- ~~[slackingway-bot](https://github.com/kn-lim/slackingway-bot) (Slack)~~
+
+This module contains packages that are for general use, interact with my homelab or for gaming-related purposes. Everything in this module is generic and each bot contains the platform-specific code.
