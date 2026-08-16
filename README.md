@@ -13,3 +13,14 @@ Go module holds the shared code for my chat bots:
 - ~~[slackingway-bot](https://github.com/kn-lim/slackingway-bot) (Slack)~~
 
 This module contains packages that are for general use, interact with my homelab or for gaming-related purposes. Everything in this module is generic and each bot contains the platform-specific code.
+
+## Packages
+
+- `aws` - Helpers for interacting with AWS services used by the chat bots.
+- `cloudflare` - Helpers for managing Cloudflare DNS records used by the chat bots.
+- `counter` - Stores named counters for each guild in a DynamoDB table.
+- `gamble` - Chance-based games such as coin flips and dice rolls.
+- `healthcheck` - Simple liveness commands for verifying that a bot is responsive.
+- `mcstatus` - Reports the status of a Minecraft Java server via the mcstatus.io API.
+- `projectzomboid` - Orchestrates the lifecycle of a Project Zomboid game server.
+- `rcon` - Executes commands against a server over the RCON protocol.
