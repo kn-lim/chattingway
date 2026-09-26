@@ -38,8 +38,8 @@ github.com/aws/aws-sdk-go-v2/service/sts v1.50.0 h1:khXV3+K5D3f4e8xtplaRdSFn1bEg
 github.com/aws/aws-sdk-go-v2/service/sts v1.50.0/go.mod h1:/8JRcdTt//hG0Q4BTmGbuOplT7ABe+5rdtqUHqXvYIM=
 github.com/aws/smithy-go v1.28.1 h1:R/nXH00c8qcfCzQVELtRw+eLQWtzv+VAIEFJ1/xxXlQ=
 github.com/aws/smithy-go v1.28.1/go.mod h1:YE2RhdIuDbA5E5bTdciG9KrW3+TiEONeUWCqxX9i1Fc=
-github.com/cloudflare/cloudflare-go/v7 v7.10.0 h1:QcrgXKr2m7uTkT+ykMKOcUzIcdemIkl4PrdKUgOYSSg=
-github.com/cloudflare/cloudflare-go/v7 v7.10.0/go.mod h1:9zcoIAtu6cmcoPszCNISvqYMXs8wObtVGXE1qGFMrNU=
+github.com/cloudflare/cloudflare-go/v7 v7.11.0 h1:haUt51prTC03PcorFOvhlWj9q58XCIk1jTbRtXJKQrI=
+github.com/cloudflare/cloudflare-go/v7 v7.11.0/go.mod h1:9zcoIAtu6cmcoPszCNISvqYMXs8wObtVGXE1qGFMrNU=
 github.com/gorcon/rcon v1.4.0 h1:pYwZ8Rhcgfh/LhdPBncecuEo5thoFvPIuMSWovz1FME=
 github.com/gorcon/rcon v1.4.0/go.mod h1:M6v6sNmr/NET9YIf+2rq+cIjTBridoy62uzQ58WgC1I=
 github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWDWE=

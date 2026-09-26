@@ -9,7 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.68.0
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.332.0
 	github.com/aws/aws-sdk-go-v2/service/route53 v1.70.0
-	github.com/cloudflare/cloudflare-go/v7 v7.10.0
+	github.com/cloudflare/cloudflare-go/v7 v7.11.0
 	github.com/gorcon/rcon v1.4.0
 	github.com/stretchr/testify v1.12.1
 )
